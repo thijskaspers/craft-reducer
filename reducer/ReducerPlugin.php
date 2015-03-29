@@ -23,8 +23,14 @@ class ReducerPlugin extends BasePlugin
 		return 'http://www.pixelcode.nl';
 	}
 
+	public function hasCpSection()
+	{
+		return true;
+	}
+
 	public function init()
 	{
+		// Run Reducer -> Event onBeforeUploadAsset
 		craft()->on('assets.onBeforeUploadAsset', function(Event $event) {
 			$this->reducer($event->params['path']);
 		});
