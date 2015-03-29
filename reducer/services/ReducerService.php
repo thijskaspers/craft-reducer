@@ -40,4 +40,57 @@ class ReducerService extends BaseApplicationComponent
 		$imagine->saveAs($filepath);
 	}
 
+	/**
+	 * Get asset sources
+	 * @return array
+	 */
+	public function getAssetSources()
+	{
+		return craft()->assetSources->getAllSources();
+	}
+
+	/**
+	 * Get Reducer settings
+	 * @return array
+	 */
+	public function getSettings()
+	{
+		$settings = craft()->db->createCommand()
+		                       ->select('*')
+		                       ->from('reducer_settings')
+		                       ->queryAll();
+
+		// Set sourceId as key
+		foreach($settings as $row) {
+			$settingsArray[$row['sourceId']] = $row;
+		}
+
+		return $settingsArray;
+	}
+
+	/**
+	 * Get Reducer settings
+	 * @return array
+	 */
+	public function getSettingsBySourceId($id)
+	{
+		$settings = craft()->db->createCommand()
+			->select('*')
+			->from('reducer_settings')
+			->where('sourceId = :source', array(':source' => $id))
+			->queryAll();
+
+		return $settings;
+	}
+
+	/**
+	 * Save Reducer settings
+	 * @return boolean
+	 */
+	public function saveSettings($data)
+	{
+		//$settingsrow = Reducer_SettingsModel::populateModel($data);
+		return true;
+	}
+
 }
