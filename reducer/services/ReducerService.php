@@ -30,14 +30,23 @@ class ReducerService extends BaseApplicationComponent
 
 	/**
 	 * Reduce the image
-	 * @param $filepath
+	 * @param string $filepath
+	 * @param integer $sourceId
 	 */
-	public function reduceImage($filepath)
+	public function reduceImage($filepath, $sourceId)
 	{
-		$imagine = new Image;
-		$imagine->loadImage($filepath);
-		$imagine->scaleAndCrop(200,200,false);
-		$imagine->saveAs($filepath);
+		// Get Reducer settings
+		$settings = $this->getSettingsBySourceId($sourceId);
+		$quality = $settings['quality'] ?: craft()->config->get('defaultImageQuality');
+
+		if ($settings['enabled'])
+		{
+			$imagine = new Image;
+			$imagine->loadImage($filepath);
+			$imagine->scaleToFit($settings['maxSize'], $settings['maxSize'], false);
+			$imagine->setQuality($quality);
+			$imagine->saveAs($filepath);
+		}
 	}
 
 	/**

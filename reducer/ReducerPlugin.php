@@ -39,20 +39,20 @@ class ReducerPlugin extends BasePlugin
 	{
 		// Run Reducer -> Event onBeforeUploadAsset
 		craft()->on('assets.onBeforeUploadAsset', function(Event $event) {
-			$this->reducer($event->params['path']);
+			$this->reducer($event->params['path'], $event->params['folder']['sourceId']);
 		});
 	}
 
 	/**
 	 * Work the magic
 	 */
-	public function reducer($filepath)
+	public function reducer($filepath, $sourceId)
 	{
 		// Check if the given filepath contains a valid image
 		if(craft()->reducer->isImage($filepath))
 		{
 			// Reduce the image
-			craft()->reducer->reduceImage($filepath);
+			craft()->reducer->reduceImage($filepath, $sourceId);
 		}
 	}
 }
