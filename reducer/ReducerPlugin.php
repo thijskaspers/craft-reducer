@@ -28,6 +28,13 @@ class ReducerPlugin extends BasePlugin
 		return true;
 	}
 
+	public function registerCpRoutes()
+	{
+		return array(
+			'reducer\/(?P<sourceId>\d+)' => 'reducer/_source',
+		);
+	}
+
 	public function init()
 	{
 		// Run Reducer -> Event onBeforeUploadAsset
