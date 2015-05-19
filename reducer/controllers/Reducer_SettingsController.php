@@ -59,7 +59,7 @@ class Reducer_SettingsController extends BaseController
 		else
 		{
 			// Validation failed
-			craft()->userSession->setError(Craft::t('An error occured, please check the form and try again!'));
+			craft()->userSession->setError(Craft::t('An error occurred, please check the form.'));
 			craft()->urlManager->setRouteVariables(array(
 				'settings' => $postData,
 				'errors' => $model->getErrors()
