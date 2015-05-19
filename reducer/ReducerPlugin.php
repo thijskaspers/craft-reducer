@@ -43,7 +43,7 @@ class ReducerPlugin extends BasePlugin
 		});
 	}
 
-	/*
+	/**
 	 * Work the magic
 	 */
 	public function reducer($filepath)

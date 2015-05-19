@@ -41,12 +41,19 @@ class ReducerService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get asset sources
-	 * @return array
+	 * Get Craft asset sources
 	 */
 	public function getAssetSources()
 	{
 		return craft()->assetSources->getAllSources();
+	}
+
+	/**
+	 * Get Craft asset source by ID
+	 */
+	public function getAssetSourceById($sourceId)
+	{
+		return craft()->assetSources->getSourceById($sourceId);
 	}
 
 	/**
@@ -55,6 +62,7 @@ class ReducerService extends BaseApplicationComponent
 	 */
 	public function getSettings()
 	{
+		// Query
 		$settings = craft()->db->createCommand()
 		                       ->select('*')
 		                       ->from('reducer_settings')
@@ -69,28 +77,56 @@ class ReducerService extends BaseApplicationComponent
 	}
 
 	/**
-	 * Get Reducer settings
+	 * Get Reducer settings by source ID
+	 * @param integer $id
 	 * @return array
 	 */
 	public function getSettingsBySourceId($id)
 	{
 		$settings = craft()->db->createCommand()
-			->select('*')
-			->from('reducer_settings')
-			->where('sourceId = :source', array(':source' => $id))
-			->queryAll();
+		                       ->select('*')
+		                       ->from('reducer_settings')
+		                       ->where('sourceId = :source', array(':source' => $id))
+		                       ->queryRow();
 
 		return $settings;
 	}
 
 	/**
 	 * Save Reducer settings
+	 * @param Reducer_SettingsModel $model
+	 * @param boolean $update (TRUE = update, FALSE = create)
 	 * @return boolean
 	 */
-	public function saveSettings($data)
+	public function saveSettings(Reducer_SettingsModel $model, $update)
 	{
-		//$settingsrow = Reducer_SettingsModel::populateModel($data);
-		return true;
+
+		// Should we update an existing record or create a new one?
+		if ($update)
+		{
+			// Find the record by primary key
+			$record = Reducer_SettingsRecord::model()->findByPk($model->getAttribute('id'));
+		}
+		else
+		{
+			// Create a new record
+			$record = new Reducer_SettingsRecord();
+			$record->setAttribute('sourceId', $model->getAttribute('source'));
+		}
+
+		// Fill record attributes with (new) model attributes
+		$record->setAttributes($model->getAttributes());
+
+		if ($record->save())
+		{
+			return true;
+		}
+		else
+		{
+			$model->addErrors($record->getErrors());
+			return false;
+		}
+
 	}
 
 }

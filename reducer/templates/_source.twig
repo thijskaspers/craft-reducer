@@ -5,7 +5,9 @@
 {% if not source %}
 	{% exit 404 %}
 {% else %}
-	{% set settings = craft.reducer.getSettingsBySourceId(source.id) %}
+	{% if settings is not defined %}
+		{% set settings = craft.reducer.getSettingsBySourceId(source.id) %}
+	{% endif %}
 {% endif %}
 
 {% set title = "Reducer: " ~ source %}
@@ -36,8 +38,10 @@
 			id: 'maxSize',
 			name: 'maxSize',
 			required: true,
+			autofocus: (settings.id is defined ? false : true),
 			placeholder: "2048",
-			value: settings.maxSize is defined ? settings.maxSize : null
+			value: (settings.maxSize is defined ? settings.maxSize : null),
+			errors: (errors.maxSize is defined ? errors.maxSize : null)
 		}) }}
 
 		{{ forms.textField({
@@ -46,7 +50,8 @@
 			id: "quality",
 			name: "quality",
 			placeholder: "100",
-			value: settings.quality is defined ? settings.quality : null
+			value: (settings.quality is defined ? settings.quality : null),
+			errors: (errors.quality is defined ? errors.quality : null)
 		}) }}
 
 		{{ forms.lightswitchField({
@@ -56,7 +61,7 @@
 			name: 'enabled',
 			onLabel: "On"|t,
 			offLabel: "Off"|t,
-			on: settings.enabled is defined ? settings.enabled : null
+			on: (settings.enabled is defined ? settings.enabled : null)
 		}) }}
 
 		<hr />

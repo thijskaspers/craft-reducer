@@ -7,10 +7,10 @@ class Reducer_SettingsModel extends BaseModel
 	{
 		return array(
 			'id'  => AttributeType::Number,
-			'sourceId'  => array(AttributeType::Number, 'required' => true),
-			'maxSize'  => array(AttributeType::Number, 'required' => true, 'min' => 0),
-			'quality'  => array(AttributeType::Number, 'min' => 0, 'max' => 100),
-			'enabled'  => array(AttributeType::Bool),
+			'source'  => array(AttributeType::Number, 'required' => true),
+			'maxSize'  => array(AttributeType::Number, 'label' => Craft::t('Max. size'), 'required' => true, 'min' => 0),
+			'quality'  => array(AttributeType::Number, 'label' => Craft::t('Quality'), 'min' => 0, 'max' => 100),
+			'enabled'  => array(AttributeType::Bool, 'label' => 'Enabled'),
 		);
 	}
 }
