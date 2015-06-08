@@ -1,0 +1,60 @@
+{% extends "_layouts/cp" %}
+
+{% set title = "Reducer"|t %}
+{% set tabs = {
+	sources: { label: "Sources"|t, url: url('reducer') }
+} %}
+{% set selectedTab = 'sources' %}
+
+{% set docsUrl = 'https://github.com/thijskaspers/craft-reducer' %}
+
+{% set content %}
+
+	<h2>{{ "Sources"|t }}</h2>
+
+	<table class="data fullwidth">
+		<thead>
+			<tr>
+				<th>{{ "Asset source"|t }}</th>
+				{% if CraftEdition == CraftPro %}<th>{{ "Type"|t }}</th>{% endif %}
+				<th>{{ "Max. size"|t }}</th>
+				<th>{{ "Quality"|t }}</th>
+				<th>{{ "Status"|t }}</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% set settings = craft.reducer.getSettings %}
+			{% for source in craft.reducer.getAssetSources %}
+				{% set isDefined = settings[source.id] is defined ? TRUE : FALSE %}
+				{% if isDefined %}
+					<tr>
+						<th><a href="{{ url('reducer/' ~ source.id) }}">{{ source.name }}</a></th>
+						{% if CraftEdition == CraftPro %}<td>{{ source.getSourceType().getName() }}</td>{% endif %}
+						<td>
+							{{ settings[source.id].maxSize ~ ' px' }}
+						</td>
+						<td>
+							{{ settings[source.id].quality is not null ? settings[source.id].quality ~ '%' : '-' }}
+						</td>
+						<td>
+							{% if settings[source.id].enabled %}
+								<span class="status on"></span> {{ "Enabled"|t }}
+							{% else %}
+								<span class="status off"></span> {{ "Disabled"|t }}
+							{% endif %}
+						</td>
+					</tr>
+				{% else %}
+					<tr>
+						<th><a href="{{ url('reducer/' ~ source.id) }}">{{ source.name }}</a></th>
+						{% if CraftEdition == CraftPro %}<td>{{ source.getSourceType().getName() }}</td>{% endif %}
+						<td>-</td>
+						<td>-</td>
+						<td><span class="status off"></span> {{ "Disabled"|t }}</td>
+					</tr>
+				{% endif %}
+			{% endfor %}
+		</tbody>
+	</table>
+
+{% endset %}
