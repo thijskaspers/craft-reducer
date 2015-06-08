@@ -141,6 +141,7 @@ class ReducerService extends BaseApplicationComponent
 		                       ->queryAll();
 
 		// Set sourceId as key
+		$settingsArray = array();
 		foreach($settings as $row) {
 			$settingsArray[$row['sourceId']] = $row;
 		}
