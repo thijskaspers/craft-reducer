@@ -4,7 +4,7 @@ _**Work in progress plugin, do not use (yet). Will post this on Straightupcraft 
 
 Craft plugin for reducing storage by resizing images immediately after uploading.
 
-Ever had to build a gallery with 100+ images? If users upload images straight from their 10 megapixel camera, it will eat up a lot of storage space. With this plugin you can set a maximum pixel and quality value and Reducer will shrink your images immediately after uploading.
+Ever had to build a gallery with 100+ images? If users upload images straight from their 10 megapixel camera, it will eat up a lot of storage space. With this plugin you can set a maximum pixel and quality value (per Asset Source) and Reducer will shrink your images immediately after uploading.
 
 ## Notes
 _Please keep in mind that it is always wise to store a larger/higher quality version of images for future use! This plugin is not a replacement for Craft's Image Transforms, it will only give you more options._
