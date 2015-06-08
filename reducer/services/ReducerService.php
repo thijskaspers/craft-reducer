@@ -41,12 +41,75 @@ class ReducerService extends BaseApplicationComponent
 
 		if ($settings['enabled'])
 		{
+
+			// Load image
 			$imagine = new Image;
 			$imagine->loadImage($filepath);
+
+			// Size/dimensions before
+			$fileBefore = array(
+				'fileSize' => filesize($filepath),
+				'fileWidth' => $imagine->getWidth(),
+				'fileHeight' => $imagine->getWidth()
+			);
+
+			// Resize image to fit within given settings
 			$imagine->scaleToFit($settings['maxSize'], $settings['maxSize'], false);
 			$imagine->setQuality($quality);
 			$imagine->saveAs($filepath);
+
+			// Size/dimensions after
+			clearstatcache(); // Clear php filesize cache
+			$fileAfter = array(
+				'fileSize' => filesize($filepath),
+				'fileWidth' => $imagine->getWidth(),
+				'fileHeight' => $imagine->getWidth()
+			);
+
+			// Add to log
+			$uid = $this->insertLog($fileBefore, $fileAfter);
+
+			// Return Unique ID
+			return $uid;
+
 		}
+
+		return FALSE;
+	}
+
+	/**
+	 * Log results into database
+	 */
+	public function insertLog($fileBefore, $fileAfter)
+	{
+		// Create log record
+		$record = new Reducer_LogRecord();
+		$record->setAttribute('sizeBefore', $fileBefore['fileSize']);
+		$record->setAttribute('widthBefore', $fileBefore['fileWidth']);
+		$record->setAttribute('heightBefore', $fileBefore['fileHeight']);
+		$record->setAttribute('sizeAfter', $fileAfter['fileSize']);
+		$record->setAttribute('widthAfter', $fileAfter['fileWidth']);
+		$record->setAttribute('heightAfter', $fileAfter['fileHeight']);
+
+		// Save to DB
+		$record->save();
+
+		// Get Unique ID
+		$uid = $record->getAttribute('uid');
+
+		return $uid;
+	}
+
+	/**
+	 * Update Log (add fileId to row with matching uid)
+	 */
+	public function updateLog($uid, $fileId)
+	{
+		$record = Reducer_LogRecord::model()->findByAttributes(array('uid' => $uid));
+		$record->setAttribute('fileId', $fileId);
+
+		// Save to DB
+		$record->save();
 	}
 
 	/**

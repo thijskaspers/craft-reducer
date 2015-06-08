@@ -3,6 +3,9 @@ namespace Craft;
 
 class ReducerPlugin extends BasePlugin
 {
+
+	public $uid;
+
 	public function getName()
 	{
 		return Craft::t('Reducer');
@@ -10,7 +13,7 @@ class ReducerPlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '1.0';
+		return '1.0.1';
 	}
 
 	public function getDeveloper()
@@ -39,7 +42,16 @@ class ReducerPlugin extends BasePlugin
 	{
 		// Run Reducer -> Event onBeforeUploadAsset
 		craft()->on('assets.onBeforeUploadAsset', function(Event $event) {
-			$this->reducer($event->params['path'], $event->params['folder']['sourceId']);
+			$this->uid = $this->reducer($event->params['path'], $event->params['folder']['sourceId']);
+		});
+
+		// Store fileId in log after upload -> Event onSaveAsset
+		craft()->on('assets.onSaveAsset', function(Event $event) {
+			// Is there a known uid for the last upload?
+			if($this->uid) {
+				// Update log
+				craft()->reducer->updateLog($this->uid, $event->params['asset']->id);
+			}
 		});
 	}
 
@@ -52,7 +64,9 @@ class ReducerPlugin extends BasePlugin
 		if(craft()->reducer->isImage($filepath))
 		{
 			// Reduce the image
-			craft()->reducer->reduceImage($filepath, $sourceId);
+			return craft()->reducer->reduceImage($filepath, $sourceId);
 		}
+
+		return FALSE;
 	}
 }
