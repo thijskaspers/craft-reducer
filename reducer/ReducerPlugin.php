@@ -13,7 +13,7 @@ class ReducerPlugin extends BasePlugin
 
 	public function getVersion()
 	{
-		return '1.0.2';
+		return '1.0.3';
 	}
 
 	public function getDeveloper()
@@ -42,7 +42,7 @@ class ReducerPlugin extends BasePlugin
 	{
 		// Run Reducer -> Event onBeforeUploadAsset
 		craft()->on('assets.onBeforeUploadAsset', function(Event $event) {
-			$this->uid = $this->reducer($event->params['path'], $event->params['folder']['sourceId']);
+			$this->uid = $this->reducer($event->params['path'], $event->params['folder']);
 		});
 
 		// Store fileId in log after upload -> Event onSaveAsset

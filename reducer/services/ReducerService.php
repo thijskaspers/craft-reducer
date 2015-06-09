@@ -50,7 +50,7 @@ class ReducerService extends BaseApplicationComponent
 			$fileBefore = array(
 				'fileSize' => filesize($filepath),
 				'fileWidth' => $imagine->getWidth(),
-				'fileHeight' => $imagine->getWidth()
+				'fileHeight' => $imagine->getHeight()
 			);
 
 			// Resize image to fit within given settings
@@ -63,7 +63,7 @@ class ReducerService extends BaseApplicationComponent
 			$fileAfter = array(
 				'fileSize' => filesize($filepath),
 				'fileWidth' => $imagine->getWidth(),
-				'fileHeight' => $imagine->getWidth()
+				'fileHeight' => $imagine->getHeight()
 			);
 
 			// Add to log
