@@ -1,6 +1,13 @@
 # Craft Reducer
 
-_**Work in progress plugin, do not use (yet). Will post this on Straightupcraft once it is ready for production..**_
+![Status: Unmaintained](https://img.shields.io/badge/status-unmaintained-red?style=for-the-badge)
+
+> [!WARNING]
+> **Deprecated: this repository is no longer maintained.**
+>
+> No further updates, fixes, or support will be provided.
+
+-----
 
 Craft plugin for reducing storage by resizing images immediately after uploading.
 
